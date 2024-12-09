@@ -2,7 +2,6 @@
 import React, { useState, useEffect } from 'react';
 import { useSession } from "next-auth/react";
 import Link from 'next/link';
-import { useServiceIndex } from './useServiceIndex';
 
 import { Red_Hat_Display } from 'next/font/google';
 import Loading from './Loading';
@@ -13,7 +12,6 @@ const STRAPI_API_KEY = process.env.NEXT_PUBLIC_STRAPI_API_KEY;
 export default function Services() {
   const { data: session } = useSession();
 
-  const { serviceIndex, setServiceIndex } = useServiceIndex();
 
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -75,7 +73,7 @@ export default function Services() {
             <div key={index} className='shadow-2xl shadow-gray-500 p-6 mx-5 md:mx-0 md:w-1/4 space-y-10 md:hover:scale-125 duration-500 rounded-lg'>
               <h1 className='text-3xl'>{item.name}</h1>
               <p>{item.description}</p>
-              <button onClick={() => setServiceIndex(index)}>
+              <button>
                 <Link href={"./Service/"+item.name} className='mt-4 bg-gray-500 px-6 py-3 rounded-lg'>
                   Select
                 </Link>
