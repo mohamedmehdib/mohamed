@@ -78,9 +78,7 @@ const SuccessPage = () => {
           if (!postResponse.ok) {
             const errorText = await postResponse.text();
             console.error(`Failed to post to Strapi for ${payment.name}:`, errorText);
-          } else {
-            const responseData = await postResponse.json();
-          }
+          } 
         }
       } catch (error) {
         console.error("Error posting data to Strapi:", error);
