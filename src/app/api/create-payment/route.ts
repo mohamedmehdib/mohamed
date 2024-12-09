@@ -36,7 +36,6 @@ export async function POST(req: Request) {
     }
 
     const paymentData = await paymentResponse.json();
-    const strapiResponse = await postToStrapi({ name, email, amount, service });
 
     return NextResponse.json({
       paymentUrl: paymentData.paymentUrl,
