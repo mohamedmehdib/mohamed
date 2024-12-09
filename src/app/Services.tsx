@@ -1,6 +1,5 @@
 "use client"
 import React, { useState, useEffect } from 'react';
-import { useSession } from "next-auth/react";
 import Link from 'next/link';
 
 import { Red_Hat_Display } from 'next/font/google';
@@ -10,8 +9,6 @@ const red_hat = Red_Hat_Display({ subsets: ['latin'], weight: '500' });
 const STRAPI_API_KEY = process.env.NEXT_PUBLIC_STRAPI_API_KEY;
 
 export default function Services() {
-  const { data: session } = useSession();
-
 
   const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
