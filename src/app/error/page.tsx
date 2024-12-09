@@ -1,10 +1,8 @@
 "use client";
 
-import { useSearchParams } from "next/navigation";
 import BackButton from "../BackButton";
 
 export default function ErrorPage() {
-  const searchParams = useSearchParams();
 
   return (
     <div>
