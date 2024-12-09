@@ -47,7 +47,7 @@ const SuccessPage = () => {
               "Authorization": `Bearer ${STRAPI_API_KEY}`,
             },
           });
-    
+          console.log(email);
           if (!checkResponse.ok) {
             const errorText = await checkResponse.text();
             console.error(`Failed to check for duplicate entry for ${payment.name}:`, errorText);
