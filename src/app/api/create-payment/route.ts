@@ -1,5 +1,4 @@
 import { NextResponse } from "next/server";
-import { postToStrapi } from "../../../utils/postToStrapi";
 
 const FLASK_API_URL = "http://127.0.0.1:5000/api/create-payment";
 
