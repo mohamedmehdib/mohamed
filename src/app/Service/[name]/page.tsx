@@ -34,7 +34,6 @@ export default function Payment({ params }: { params: Promise<{ name: string }> 
 
   const [services, setServices] = useState<Service[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
   const [resolvedParams, setResolvedParams] = useState<{ name: string } | null>(null);
 
@@ -45,7 +44,7 @@ export default function Payment({ params }: { params: Promise<{ name: string }> 
     service: "",
   });
 
-  const handleError = (errorMessage: string, additionalInfo?: any) => {
+  const handleError = () => {
 
   
     router.push(`/error?message=An unexpected error occurred. Please try again later.`);
@@ -60,7 +59,7 @@ export default function Payment({ params }: { params: Promise<{ name: string }> 
         const resolved = await params;
         setResolvedParams(resolved);
       } catch (err) {
-        handleError("Failed to resolve parameters.", err);
+        handleError();
       }
     };
     resolveParams();
@@ -83,7 +82,7 @@ export default function Payment({ params }: { params: Promise<{ name: string }> 
         const data = await response.json();
         setServices(data.data);
       } catch (err: any) {
-        handleError(err.message || "An unknown error occurred while fetching services.");
+        handleError();
       } finally {
         setLoading(false);
       }
@@ -143,10 +142,10 @@ export default function Payment({ params }: { params: Promise<{ name: string }> 
       if (response.data.paymentUrl) {
         window.location.href = response.data.paymentUrl;
       } else {
-        handleError("Payment URL not found in response");
+        handleError();
       }
     } catch (err: any) {
-      handleError("Error creating payment.", err);
+      handleError();
     }
   };
 
