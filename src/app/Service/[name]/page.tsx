@@ -3,7 +3,7 @@ import React, { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 import { Red_Hat_Display } from 'next/font/google';
-import Loading from './Loading';
+import Loading from "../../Loading";
 const red_hat = Red_Hat_Display({ subsets: ['latin'], weight: '500' });
 
 const STRAPI_API_KEY = process.env.NEXT_PUBLIC_STRAPI_API_KEY;
