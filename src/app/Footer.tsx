@@ -1,8 +1,7 @@
 "use client"
 import { useEffect, useState } from 'react';
-import { Jolly_Lodger , Ms_Madi} from 'next/font/google';
+import { Ms_Madi} from 'next/font/google';
 
-const logo = Jolly_Lodger({ subsets: ['latin'], weight: '400' });
 const l = Ms_Madi({subsets: ['latin'],weight:'400'}) ;
 
 export default function Footer() {
