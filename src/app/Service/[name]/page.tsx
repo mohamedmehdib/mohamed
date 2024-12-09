@@ -59,6 +59,7 @@ export default function Payment({ params }: { params: Promise<{ name: string }> 
         const resolved = await params;
         setResolvedParams(resolved);
       } catch (err) {
+        console.log(err)
         handleError();
       }
     };
@@ -82,6 +83,7 @@ export default function Payment({ params }: { params: Promise<{ name: string }> 
         const data = await response.json();
         setServices(data.data);
       } catch (err: any) {
+        console.log(err)
         handleError();
       } finally {
         setLoading(false);
@@ -145,6 +147,7 @@ export default function Payment({ params }: { params: Promise<{ name: string }> 
         handleError();
       }
     } catch (err: any) {
+      console.log(err)
       handleError();
     }
   };
