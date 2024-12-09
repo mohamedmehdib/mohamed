@@ -1,5 +1,5 @@
 "use client"
-import React, { useRef, useState } from 'react';
+import React, { useState } from 'react';
 
 const STRAPI_API_KEY = process.env.NEXT_PUBLIC_STRAPI_API_KEY;
 
@@ -40,15 +40,6 @@ const Contact: React.FC = () => {
     }
   };
 
-  const inputName = useRef<HTMLInputElement>(null);
-  const inputMail = useRef<HTMLInputElement>(null);
-  const inputMessage = useRef<HTMLTextAreaElement>(null);
-
-  const clear = () => {
-    if (inputName.current) inputName.current.value = '';
-    if (inputMail.current) inputMail.current.value = '';
-    if (inputMessage.current) inputMessage.current.value = '';
-  };
 
   return (
     <div id="contact" className="text-zinc-600 bg-gray-300 py-5">
@@ -79,7 +70,6 @@ const Contact: React.FC = () => {
             value={formData.name}
             onChange={handleChange}
             required
-            ref={inputName}
             className="placeholder:text-gray-600 resize-none outline-none border-2 border-gray-600 bg-zinc-300 rounded-xl text-lg md:text-xl p-2 md:p-3"
             placeholder="Enter your name ..."
           />
@@ -89,7 +79,6 @@ const Contact: React.FC = () => {
             value={formData.email}
             onChange={handleChange}
             required
-            ref={inputMail}
             className="placeholder:text-gray-600 resize-none outline-none border-2 border-gray-600 bg-zinc-300 rounded-xl text-lg md:text-xl p-2 md:p-3"
             placeholder="Enter your email ..."
           />
@@ -98,7 +87,6 @@ const Contact: React.FC = () => {
             value={formData.message}
             onChange={handleChange}
             required
-            ref={inputMessage}
             className="placeholder:text-gray-600 resize-none outline-none border-2 border-gray-600 bg-zinc-300 rounded-xl text-lg md:text-xl p-2 md:p-3 h-60"
             placeholder="Enter your message ..."
           />
