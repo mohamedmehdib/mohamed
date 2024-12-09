@@ -1,90 +1,44 @@
-"use client";
+"use client"
+import React, { useState, useEffect } from 'react';
+import Link from 'next/link';
 
-import { useState, useEffect, FormEvent } from "react";
-import axios from "axios";
-import { useSession } from "next-auth/react";
-import { useRouter } from "next/navigation"; // Import the useRouter hook
-import BackButton from "../../BackButton";
-import Accordion from "../Accordion";
-import Footer from "../../Footer";
-import Loading from "../../Loading";
+import { Red_Hat_Display } from 'next/font/google';
+import Loading from './Loading';
+const red_hat = Red_Hat_Display({ subsets: ['latin'], weight: '500' });
 
 const STRAPI_API_KEY = process.env.NEXT_PUBLIC_STRAPI_API_KEY;
 
-if (!STRAPI_API_KEY) {
-  console.error("STRAPI_API_KEY is not defined. Check your environment variables.");
-}
+export default function Services() {
 
-interface FormData {
-  name: string;
-  email: string;
-  amount: number;
-  service: string;
-}
 
-interface Service {
-  id: number;
-  name: string;
-  price: number;
-}
-
-export default function Payment({ params }: { params: Promise<{ name: string }> }) {
-  const router = useRouter(); // Initialize the router
-  const { data: session } = useSession();
-
-  const [services, setServices] = useState<Service[]>([]);
+  const [services, setServices] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [mounted, setMounted] = useState(false);
-  const [resolvedParams, setResolvedParams] = useState<{ name: string } | null>(null);
-
-  const [formData, setFormData] = useState<FormData>({
-    name: "",
-    email: "",
-    amount: 0,
-    service: "",
-  });
-
-  const handleError = () => {
-
-  
-    router.push(`/error?message=An unexpected error occurred. Please try again later.`);
-  };
-  
 
   useEffect(() => {
     setMounted(true);
-
-    const resolveParams = async () => {
-      try {
-        const resolved = await params;
-        setResolvedParams(resolved);
-      } catch (err) {
-        console.log(err)
-        handleError();
-      }
-    };
-    resolveParams();
-  }, [params]);
+  }, []);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
-        const response = await fetch("http://localhost:1337/api/services", {
-          method: "GET",
+        const response = await fetch('http://localhost:1337/api/services', {
+          method: 'GET',
           headers: {
-            Authorization: `Bearer ${STRAPI_API_KEY}`,
+            'Authorization': `Bearer ${STRAPI_API_KEY}`,
           },
         });
 
         if (!response.ok) {
-          throw new Error("Failed to fetch services. Please try again later.");
+          throw new Error('Failed to fetch data');
         }
-
+        
         const data = await response.json();
         setServices(data.data);
       } catch (err: any) {
-        console.log(err)
-        handleError();
+        setError(err.message);
       } finally {
         setLoading(false);
       }
@@ -93,95 +47,41 @@ export default function Payment({ params }: { params: Promise<{ name: string }> 
     fetchServices();
   }, []);
 
-  useEffect(() => {
-    if (services.length > 0 && resolvedParams) {
-      const matchedService = services.find(
-        (service) => service.name === resolvedParams.name
-      );
-      if (matchedService) {
-        setFormData((prevFormData) => ({
-          ...prevFormData,
-          amount: matchedService.price || 0,
-          service: matchedService.name,
-        }));
-      }
-    }
-  }, [services, resolvedParams]);
-
-  useEffect(() => {
-    if (session?.user) {
-      setFormData((prevFormData) => ({
-        ...prevFormData,
-        name: session.user?.name || "",
-        email: session.user?.email || "",
-      }));
-    }
-  }, [session]);
-
-  if (!mounted || !resolvedParams) {
+  if (!mounted) {
     return null;
   }
 
   if (loading) {
-    return (
-      <div>
-        <Loading />
-      </div>
-    );
+    return <div>
+      <Loading/>
+    </div>;
   }
 
-  const handleSubmit = async (e: FormEvent) => {
-    e.preventDefault();
-
-    if (!session) {
-      window.location.href = "./Profile";
-      return;
-    }
-
-    try {
-      const response = await axios.post<{ paymentUrl: string }>("http://localhost:5000/api/create-payment", formData);
-
-      if (response.data.paymentUrl) {
-        window.location.href = response.data.paymentUrl;
-      } else {
-        handleError();
-      }
-    } catch (err: any) {
-      console.log(err)
-      handleError();
-    }
-  };
+  if (error) {
+    return <div>Error: {error}</div>;
+  }
 
   return (
-    <form onSubmit={handleSubmit} className="bg-gray-300 text-zinc-600">
-      <BackButton />
-      <h1 className="text-center py-10 text-5xl">
-        {resolvedParams.name || "Loading service name..."}
-      </h1>
-      <div className="mx-auto w-2/3 rounded-lg">
-        <Accordion
-          title="Lorem ipsum dolor sit amet consectetur adipisicing elit"
-          answer="Lorem ipsum dolor sit amet consectetur adipisicing elit"
-        />
-        <Accordion
-          title="Lorem ipsum dolor sit amet consectetur adipisicing elit"
-          answer="Lorem ipsum dolor sit amet consectetur adipisicing elit"
-        />
-        <Accordion
-          title="Lorem ipsum dolor sit amet consectetur adipisicing elit"
-          answer="Lorem ipsum dolor sit amet consectetur adipisicing elit"
-        />
+    <div className='bg-gray-300 text-gray-800 py-5 md:py-10'>
+      <h1 className={'text-center py-14 md:py-20 text-5xl ' + red_hat.className}>My Services</h1>
+      
+      <div className='md:flex justify-around'>
+        {services.length > 0 ? (
+          services.map((item, index) => (
+            <div key={index} className='shadow-2xl shadow-gray-500 p-6 mx-5 md:mx-0 md:w-1/4 space-y-10 md:hover:scale-125 duration-500 rounded-lg'>
+              <h1 className='text-3xl'>{item.name}</h1>
+              <p>{item.description}</p>
+              <button>
+                <Link href={"./Service/"+item.name} className='mt-4 bg-gray-500 px-6 py-3 rounded-lg'>
+                  Select
+                </Link>
+              </button>
+            </div>
+          ))
+        ) : (
+          <p>No services available.</p>
+        )}
       </div>
-
-      <div className="flex justify-center">
-        <button
-          className="p-5 rounded-2xl w-fit my-10 bg-zinc-600 text-gray-300"
-          type="submit"
-        >
-          Reserve session {formData.amount || "N/A"}dt
-        </button>
-      </div>
-      <Footer />
-    </form>
+    </div>
   );
 }
