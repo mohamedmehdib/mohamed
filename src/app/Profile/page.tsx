@@ -5,18 +5,15 @@ import Link from "next/link";
 import { setUserName } from "./userStore";
 import BackButton from "../BackButton";
 
-export async function getUserName() {
+export default async function SignIn() {
   const session = await auth();
   const user = session?.user;
+
   if (user && user.name) {
     setUserName(user.name);
   }
-  return user;
-}
 
-export default async function SignIn() {
-  const user = await getUserName();
-
+  // If user has an email and name, check if the user exists in Strapi
   if (user && user.email && user.name) {
     const exists = await emailExistsInStrapi(user.email);
     if (!exists) {
@@ -32,7 +29,6 @@ export default async function SignIn() {
           "use server";
           await signOut();
         }}
-
         className="h-screen space-y-10 flex flex-col justify-center items-center bg-gray-300 text-zinc-600"
       >   
         <h1 className="text-5xl">
